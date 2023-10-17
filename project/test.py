@@ -772,6 +772,36 @@ def studentdashboard(id):
 
         export_conn.close()
 
+    def export_table_as_csv(table_name):
+        # Create a new database connection for exporting the table data
+        export_conn = sqlite3.connect("test2.db")
+        export_c = export_conn.cursor()
+
+        # Fetch data from the selected table
+        export_c.execute(f"SELECT * FROM {table_name}")
+        data = export_c.fetchall()
+
+        if data:
+            # Export data to a CSV file
+            filename = f"{table_name}.csv"
+            with open(filename, 'w', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(["MIS", "Marks"])
+                writer.writerows(data)
+
+            # Create a new window for the download message
+            download_window = tk.Toplevel()
+            download_window.title("Download Successful")
+
+            # Create a label with the download message
+            download_label = tk.Label(download_window, text="Marks downloaded as CSV.", font=('Arial', 14))
+            download_label.pack(padx=20, pady=10)
+
+        else:
+            messagebox.showinfo("No Data", f"No data found in table '{table_name}'.")
+
+        export_conn.close()
+
 
     # Create a new window
     dashboard_window = tk.Tk()
@@ -806,7 +836,7 @@ def studentdashboard(id):
     subject4_button = tk.Button(dashboard_window, text='DC', font=button_font, bg='#3498DB', fg='white',command=lambda: convert_tables_to_quiz(id, "dc"))  # Blue button
 
     # Create the graph buttons
-    graph1_button = tk.Button(dashboard_window, text='View Bar Graph', font=button_font, bg='#3498DB', fg='white', command=lambda: create_quiz_graph(id))  # Blue button
+    graph1_button = tk.Button(dashboard_window, text='Download Marks as CSV', font=button_font, bg='#3498DB', fg='white', command=lambda: export_table_as_csv(id))  # Blue button
     graph2_button = tk.Button(dashboard_window, text='Download Marks as PDF', font=button_font, bg='#3498DB', fg='white',command=lambda: export_table_as_pdf(id))  # Blue button
 
     # Add the widgets to the window
