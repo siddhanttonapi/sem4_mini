@@ -289,59 +289,60 @@ def export_data(id):
 
 
 def adminlogin():
-    # Create the register window
-    root.destroy()
-    admin_window = tk.Tk()
-    admin_window.title('Admin Login')
-    admin_window.geometry('400x300')
-    admin_window.configure(bg='#17202A')  # Set background color
+    try:
+        root.destroy()
+        admin_window = tk.Tk()
+        admin_window.title('Admin Login')
+        admin_window.geometry('400x300')
+        admin_window.configure(bg='#17202A')  # Dark background
 
+        # Widgets with color adjustments
+        titleadmin_label = tk.Label(admin_window, text='Login', font=('Arial', 40), fg='#E74C3C', bg='#17202A')  # Red title
+        id_label = tk.Label(admin_window, text='ID', font=('Arial', 18), fg='white', bg='#17202A')
+        id_entry = tk.Entry(admin_window, font=('Arial', 18), bg='#2C3E50', fg='white')  # Dark background for entry
+        pw_label = tk.Label(admin_window, text='Password', font=('Arial', 18), fg='white', bg='#17202A')
+        pw_entry = tk.Entry(admin_window, show='*', font=('Arial', 18), bg='#2C3E50', fg='white')
+        loginadmin_button = tk.Button(admin_window, text='Login', font=('Arial', 20), bg='#3498db', fg='white')  # Blue button
+        regadmin_button = tk.Button(admin_window, text='Register', font=('Arial', 20), bg='#3498db', fg='white')  # Blue button
 
-    # Create the widgets
-    titleadmin_label = tk.Label(admin_window, text='Login', font=('Arial', 40), fg='#E74C3C', bg='#17202A')
-    id_label = tk.Label(admin_window, text='ID', font=('Arial', 18), fg='white', bg='#17202A')
-    id_entry = tk.Entry(admin_window, font=('Arial', 18))
-    pw_label = tk.Label(admin_window, text='Password', font=('Arial', 18), fg='white', bg='#17202A')
-    pw_entry = tk.Entry(admin_window, show='*', font=('Arial', 18))
-    loginadmin_button = tk.Button(admin_window, text='Login', font=('Arial', 20), bg='#4CAF50', fg='white')
-    regadmin_button = tk.Button(admin_window, text='Register', font=('Arial', 20), bg='#4CAF50', fg='white')
+        # Layout
+        titleadmin_label.place(relx=0.5, rely=0.1, anchor='center')
+        id_label.place(relx=0.3, rely=0.3, anchor='center')
+        id_entry.place(relx=0.7, rely=0.3, anchor='center')
+        pw_label.place(relx=0.3, rely=0.4, anchor='center')
+        pw_entry.place(relx=0.7, rely=0.4, anchor='center')
+        loginadmin_button.place(relx=0.5, rely=0.6, anchor='center')
+        regadmin_button.place(relx=0.8, rely=0.8, anchor='center')
 
+        def loginadmin():
+            try:
+                admin_id = id_entry.get()
+                admin_pw = pw_entry.get()
 
+                # Database check
+                c.execute("SELECT * FROM ADMINLOGIN WHERE ID=? AND PW=?", (admin_id, admin_pw))
+                row = c.fetchone()
 
-    # Define the layout
-    titleadmin_label.place(relx=0.5, rely=0.1, anchor='center')
-    id_label.place(relx=0.3, rely=0.3, anchor='center')
-    id_entry.place(relx=0.7, rely=0.3, anchor='center')
-    pw_label.place(relx=0.3, rely=0.4, anchor='center')
-    pw_entry.place(relx=0.7, rely=0.4, anchor='center')
-    loginadmin_button.place(relx=0.5, rely=0.6, anchor='center')
-    regadmin_button.place(relx=0.8, rely=0.8, anchor='center')
+                if row is not None:
+                    admin_window.destroy()
+                    admindashboard2(admin_id)
+                else:
+                    messagebox.showerror("Login Failed", "Incorrect ID or password. Please try again.")
+                    pw_entry.delete(0, tk.END)
+            except Exception as e:
+                messagebox.showerror("Error", f"An unexpected error occurred: {str(e)}")
 
-    def loginadmin():
-        # Get the ID and password from the entry widgets
-        id = id_entry.get()
-        pw = pw_entry.get()
+        # Button configurations
+        loginadmin_button.configure(command=loginadmin)
+        regadmin_button.configure(command=lambda: print("Register Button Clicked"))
 
-        # Check the credentials against the database
-        c.execute("SELECT * FROM ADMINLOGIN WHERE ID=? AND PW=?", (id, pw))
-        row = c.fetchone()
-        if row is not None:
-            admin_window.destroy()
-            admindashboard2(id)
-        else:
-            # If the login fails, show an error message and prompt the user to try again
-            error_label = tk.Label(admin_window, text='Incorrect ID or password. Please try again.', fg='red', font=('Arial', 12), bg='#17202A')
-            error_label.place(relx=0.5, rely=0.8, anchor='center')
-            pw_entry.delete(0, tk.END)
+        admin_window.eval('tk::PlaceWindow . center')
+        admin_window.attributes("-fullscreen", True)
+        admin_window.attributes('-zoomed', True)
+        admin_window.mainloop()
 
-    # Configure buttons
-    loginadmin_button.configure(command=loginadmin)
-    regadmin_button.configure(command=registerpageadmin)
-
-    # Center the window on the screen
-    admin_window.eval('tk::PlaceWindow . center')
-    admin_window.attributes("-fullscreen", True)
-    admin_window.attributes('-zoomed', True)
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
 
 
 
