@@ -79,9 +79,7 @@ password_label.config(borderwidth=0)
 login_button = tk.Button(root, text='Login', font=button_font, bg='#4CAF50', fg='white')
 login_button.place(relx=0.5, rely=0.6, anchor='center')
 
-# Change the font, background color, and foreground color of the register button
-reg_button = tk.Button(root, text='Register', font=button_font, bg='#4CAF50', fg='white')
-reg_button.place(relx=0.8, rely=0.8, anchor='center')
+
 
 # Change the font, background color, and foreground color of the admin button
 admin_button = tk.Button(root, text='Admin', font=button_font, bg='#4CAF50', fg='white')
@@ -481,7 +479,7 @@ def registerpage():
 
 # Bind the login function to the login button
 login_button.configure(command=login)
-reg_button.configure(command=registerpage)
+
 admin_button.configure(command=adminlogin)
 
 def open_subject_window(subject,id):
