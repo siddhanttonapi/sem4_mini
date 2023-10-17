@@ -14,7 +14,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import csv
 from fpdf import FPDF
 
-# Connect to the database
+# Connect to the database.....
 conn = sqlite3.connect('test2.db')
 c = conn.cursor()
 
