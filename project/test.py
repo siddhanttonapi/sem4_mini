@@ -51,7 +51,7 @@ def convert_tables_to_quiz():
 
 # Create a label with the icon-like image
 icon_image = tk.PhotoImage(file='usericon.png')
-icon_image = icon_image.subsample(50, 50)  # Adjust the size of the icon
+icon_image = icon_image.subsample(45, 45)  # Adjust the size of the icon
 icon_label = tk.Label(root, image=icon_image)
 icon_label.place(relx=0.5, rely=0.1, anchor='center')  # Adjust the position of the icon
 
